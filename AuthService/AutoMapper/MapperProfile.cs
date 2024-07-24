@@ -1,4 +1,5 @@
 ﻿using AuthMicroservice.Models.Auth;
+using AuthMicroservice.Models.Auth.ResponseModels;
 using AutoMapper;
 
 namespace AuthMicroservice.AutoMapper

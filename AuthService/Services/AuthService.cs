@@ -1,12 +1,13 @@
 ﻿using AuthMicroservice.Abstractions;
 using AuthMicroservice.Models;
 using AuthMicroservice.Models.Auth;
-using AuthMicroservice.Models.Auth.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.UserData;
 using AuthMicroservice.Options;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using SharedModels;
+using NotificationService.ContractModels;
 
 namespace AuthMicroservice.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace AuthMicroservice.Models.Auth
+﻿namespace AuthMicroservice.Models.Auth.RequestModels.UserData
 {
     public class SignInUserData
     {

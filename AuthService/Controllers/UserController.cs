@@ -1,6 +1,7 @@
 ﻿using AuthMicroservice.Abstractions;
-using AuthMicroservice.Models.Auth;
-using AuthMicroservice.Models.Auth.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.UserData;
+using AuthMicroservice.Models.Auth.ResponseModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

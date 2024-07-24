@@ -1,4 +1,4 @@
-﻿namespace AuthMicroservice.Models.Auth.SecondFactor
+﻿namespace AuthMicroservice.Models.Auth.RequestModels.SecondFactor
 {
     public class SecondFactorGet
     {

@@ -1,5 +1,6 @@
 ﻿using AuthMicroservice.Models.Auth;
-using AuthMicroservice.Models.Auth.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
+using AuthMicroservice.Models.Auth.RequestModels.UserData;
 
 namespace AuthMicroservice.Abstractions
 {

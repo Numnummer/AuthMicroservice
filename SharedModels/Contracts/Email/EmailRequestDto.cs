@@ -1,4 +1,4 @@
-﻿namespace SharedModels
+﻿namespace NotificationService.ContractModels
 {
     public record EmailRequestDto(string from,
         string to,

@@ -2,6 +2,7 @@
 using AuthMicroservice.Abstractions;
 using AuthMicroservice.Models;
 using AuthMicroservice.Models.Auth;
+using AuthMicroservice.Models.Auth.RequestModels;
 using AuthMicroservice.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
