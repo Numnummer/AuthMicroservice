@@ -1,6 +1,6 @@
-﻿using AuthMicroservice.Models;
-using AuthMicroservice.Models.Auth;
+﻿using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Models.Auth.RequestModels;
+using AuthMicroservice.Models.User;
 using Microsoft.AspNetCore.Identity;
 
 

@@ -4,6 +4,7 @@ using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Database;
 using AuthMicroservice.Extentions;
 using AuthMicroservice.Models.Auth.RequestModels;
+using AuthMicroservice.Models.User;
 using AuthMicroservice.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;

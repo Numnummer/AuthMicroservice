@@ -1,8 +1,8 @@
 ﻿using AuthMicroservice.Abstractions;
 using AuthMicroservice.Abstractions.UseCases;
-using AuthMicroservice.Models;
 using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
+using AuthMicroservice.Models.User;
 using AuthMicroservice.Options;
 using AuthMicroservice.Services;
 using MassTransit;
@@ -58,7 +58,7 @@ namespace AuthTest
 
             var monitor = Mock.Of<IOptionsMonitor<MailSettings>>(_ => _.CurrentValue == new MailSettings());
 
-            var authService = new AuthService(userManagerMock.Object,
+            var authService = new AppUserUseCases(userManagerMock.Object,
                 signInManagerMock.Object, tokenServiceMock.Object,
                 monitor, publishEndpointMock.Object);
             //act

@@ -4,6 +4,7 @@ using AuthMicroservice.Abstractions.Services;
 using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Database.Repository;
 using AuthMicroservice.Models.Auth.AuthTokens;
+using AuthMicroservice.Models.User;
 using AuthMicroservice.Services;
 
 namespace AuthMicroservice.Extentions
@@ -16,7 +17,7 @@ namespace AuthMicroservice.Extentions
         }
         public static void RegisterAppUseCases(this WebApplicationBuilder builder)
         {
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAppUserUseCases, AppUserUseCases>();
             builder.Services.AddScoped<IAuthTokensUseCases, AuthTokensUseCases>();
         }
         public static void RegisterAppRepositories(this WebApplicationBuilder builder)

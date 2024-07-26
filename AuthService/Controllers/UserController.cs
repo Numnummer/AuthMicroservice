@@ -1,4 +1,5 @@
 ﻿using AuthMicroservice.Abstractions;
+using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
 using AuthMicroservice.Models.Auth.ResponseModels;
@@ -10,7 +11,7 @@ namespace AuthMicroservice.Controllers
 {
     [ApiController]
     [Route("/")]
-    public class UserController(IAuthService authService,
+    public class UserController(IAppUserUseCases appUserUseCases,
         ILogger<UserController> logger, IMapper mapper) : ControllerBase
     {
         /// <summary>
@@ -22,7 +23,7 @@ namespace AuthMicroservice.Controllers
         public async Task<IActionResult> RegistrateUser(RegistrationUserData registrationUserData)
         {
             logger.LogInformation("Начинаем процесс регистрации");
-            var result = await authService.RegistrateUser(registrationUserData);
+            var result = await appUserUseCases.RegistrateUser(registrationUserData);
             if (result==null)
             {
                 logger.LogError("Не удалось зарегистрировать пользователя");
@@ -49,7 +50,7 @@ namespace AuthMicroservice.Controllers
         [HttpPost("enter")]
         public async Task<IActionResult> SignInUser(SignInUserData signInUserData)
         {
-            var result = await authService.SignInUserAsync(signInUserData);
+            var result = await appUserUseCases.SignInUserAsync(signInUserData);
             if (result==null)
             {
                 logger.LogError("Не удалось войти");
@@ -71,7 +72,7 @@ namespace AuthMicroservice.Controllers
         [HttpGet("secondFactor/{email}")]
         public async Task<IActionResult> SecondFactorEmail(string email)
         {
-            await authService.SendEmailCodeAsync(email);
+            await appUserUseCases.SendEmailCodeAsync(email);
             logger.LogInformation($"Код подтверждения отправлен сервису нотификации");
             return Ok("Код отправлен");
         }
@@ -79,7 +80,7 @@ namespace AuthMicroservice.Controllers
         [HttpPost("secondFactor")]
         public async Task<IActionResult> SecondFactorEmail(SecondFactorPost postData)
         {
-            var result = await authService.SecondFactorSignInAsync(postData);
+            var result = await appUserUseCases.SecondFactorSignInAsync(postData);
             if (result!=null)
             {
                 logger.LogInformation("Пользователь аутентифицирован");
@@ -91,7 +92,7 @@ namespace AuthMicroservice.Controllers
         [HttpDelete("deleteUser/{email}")]
         public async Task<IActionResult> DeleteUser(string email)
         {
-            var result = await authService.DeleteUserAsync(email);
+            var result = await appUserUseCases.DeleteUserAsync(email);
             if (result) return Ok();
             return StatusCode(500);
         }

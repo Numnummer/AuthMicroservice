@@ -1,5 +1,5 @@
-﻿using AuthMicroservice.Models;
-using AuthMicroservice.Models.Auth.AuthTokens;
+﻿using AuthMicroservice.Models.Auth.AuthTokens;
+using AuthMicroservice.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

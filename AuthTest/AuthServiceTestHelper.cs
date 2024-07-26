@@ -1,4 +1,4 @@
-﻿using AuthMicroservice.Models;
+﻿using AuthMicroservice.Models.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

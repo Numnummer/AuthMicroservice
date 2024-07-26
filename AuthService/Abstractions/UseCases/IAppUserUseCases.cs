@@ -1,10 +1,10 @@
-﻿using AuthMicroservice.Models.Auth;
-using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
+﻿using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
+using AuthMicroservice.Models.Auth;
 
-namespace AuthMicroservice.Abstractions
+namespace AuthMicroservice.Abstractions.UseCases
 {
-    public interface IAuthService
+    public interface IAppUserUseCases
     {
         Task<AuthResult?> RegistrateUser(RegistrationUserData registrationUserData);
         Task SendEmailCodeAsync(string email);

@@ -2,7 +2,7 @@ using AuthMicroservice.AutoMapper;
 using AuthMicroservice.CustomMiddleware;
 using AuthMicroservice.Database;
 using AuthMicroservice.Extentions;
-using AuthMicroservice.Models;
+using AuthMicroservice.Models.User;
 using AuthMicroservice.Options;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

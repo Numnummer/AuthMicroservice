@@ -1,23 +1,22 @@
-﻿using AuthMicroservice.Abstractions;
-using AuthMicroservice.Abstractions.UseCases;
-using AuthMicroservice.Models;
-using AuthMicroservice.Models.Auth;
+﻿using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
+using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Options;
+using AuthMicroservice.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using NotificationService.ContractModels;
 
-namespace AuthMicroservice.Services
+namespace AuthMicroservice.Models.User
 {
-    public class AuthService(UserManager<AppUser> userManager,
+    public class AppUserUseCases(UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         IAuthTokensUseCases authTokensUseCases,
         IOptionsMonitor<MailSettings> mailSettingsMonitor,
         IPublishEndpoint publishEndpoint,
-        ILogger<AuthService>? logger = null) : IAuthService
+        ILogger<AppUserUseCases>? logger = null) : IAppUserUseCases
     {
         public async Task<AuthResult?> RegistrateUser(RegistrationUserData registrationUserData)
         {
