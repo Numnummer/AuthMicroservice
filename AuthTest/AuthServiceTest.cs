@@ -1,6 +1,8 @@
 ﻿using AuthMicroservice.Abstractions;
+using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Models;
 using AuthMicroservice.Models.Auth;
+using AuthMicroservice.Models.Auth.RequestModels.UserData;
 using AuthMicroservice.Options;
 using AuthMicroservice.Services;
 using MassTransit;
@@ -38,13 +40,9 @@ namespace AuthTest
                 Success = true,
                 RefreshToken = "refreshToken.Token"
             };
-            var tokenServiceMock = new Mock<ITokenService>();
-            tokenServiceMock.Setup(_ => _.GenerateJwtTokenAsync(It.IsAny<AppUser>()))
+            var tokenServiceMock = new Mock<IAuthTokensUseCases>();
+            tokenServiceMock.Setup(_ => _.GenerateJwtAndRefreshTokensAsync(It.IsAny<AppUser>()))
                 .Returns(Task.FromResult(authResultStub));
-
-            var emailServiceMock = new Mock<IEmailService>();
-            emailServiceMock.Setup(_ => _.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(true);
 
             var publishEndpointMock = new Mock<IPublishEndpoint>();
             publishEndpointMock.Setup(_ => _.Publish(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -62,7 +60,6 @@ namespace AuthTest
 
             var authService = new AuthService(userManagerMock.Object,
                 signInManagerMock.Object, tokenServiceMock.Object,
-                emailServiceMock.Object,
                 monitor, publishEndpointMock.Object);
             //act
             var result = await authService.RegistrateUser(registrationData);

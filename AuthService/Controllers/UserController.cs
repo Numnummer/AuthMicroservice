@@ -11,7 +11,7 @@ namespace AuthMicroservice.Controllers
     [ApiController]
     [Route("/")]
     public class UserController(IAuthService authService,
-        ILogger<UserController> logger, IMapper mapper, ITokenService tokenService) : ControllerBase
+        ILogger<UserController> logger, IMapper mapper) : ControllerBase
     {
         /// <summary>
         /// Зарегистрироваться
@@ -87,19 +87,6 @@ namespace AuthMicroservice.Controllers
             }
             return StatusCode(500, "Не удалось авторизоваться");
         }
-
-        /// <summary>
-        /// Получение данных пользователя
-        /// </summary>
-        /// <returns>UserProfileData</returns>
-        [HttpGet("getUserData")]
-        [Authorize(Roles = "User, Teacher")]
-        public async Task<IActionResult> GetUserData()
-        {
-
-            return Ok();
-        }
-
 
         [HttpDelete("deleteUser/{email}")]
         public async Task<IActionResult> DeleteUser(string email)

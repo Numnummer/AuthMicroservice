@@ -1,4 +1,5 @@
 ﻿using AuthMicroservice.Models.Auth;
+using AuthMicroservice.Models.Auth.RequestModels.UserData;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Net.Http.Json;

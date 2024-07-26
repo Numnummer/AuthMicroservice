@@ -1,8 +1,7 @@
-﻿using AuthMicroservice.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AuthMicroservice.Models.Auth
+namespace AuthMicroservice.Models.Auth.AuthTokens
 {
     public class RefreshToken
     {

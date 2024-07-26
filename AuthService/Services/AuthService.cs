@@ -1,4 +1,5 @@
 ﻿using AuthMicroservice.Abstractions;
+using AuthMicroservice.Abstractions.UseCases;
 using AuthMicroservice.Models;
 using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
@@ -13,8 +14,7 @@ namespace AuthMicroservice.Services
 {
     public class AuthService(UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
-        ITokenService tokenService,
-        IEmailService emailService,
+        IAuthTokensUseCases authTokensUseCases,
         IOptionsMonitor<MailSettings> mailSettingsMonitor,
         IPublishEndpoint publishEndpoint,
         ILogger<AuthService>? logger = null) : IAuthService
@@ -35,7 +35,7 @@ namespace AuthMicroservice.Services
                 logger?.LogInformation(authResult.ToString());
                 if (authResult.Succeeded)
                 {
-                    return await tokenService.GenerateJwtTokenAsync(user);
+                    return await authTokensUseCases.GenerateJwtAndRefreshTokensAsync(user);
                 }
                 if (authResult.IsNotAllowed && !user.EmailConfirmed)
                 {
@@ -75,7 +75,7 @@ namespace AuthMicroservice.Services
             if (user == null) return null;
             var result = await signInManager.TwoFactorSignInAsync("Email", data.Code, data.Remember, false);
             if (result.Succeeded)
-                return await tokenService.GenerateJwtTokenAsync(user);
+                return await authTokensUseCases.GenerateJwtAndRefreshTokensAsync(user);
             return null;
         }
 
@@ -94,7 +94,7 @@ namespace AuthMicroservice.Services
             var authResult = await signInManager.PasswordSignInAsync(user, signInUserData.Password, false, true);
             if (authResult.Succeeded)
             {
-                return await tokenService.GenerateJwtTokenAsync(user);
+                return await authTokensUseCases.GenerateJwtAndRefreshTokensAsync(user);
             }
             if (authResult.IsNotAllowed && !user.EmailConfirmed)
             {

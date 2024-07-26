@@ -1,10 +1,10 @@
 ﻿using AuthMicroservice.Models;
-using AuthMicroservice.Models.Auth;
+using AuthMicroservice.Models.Auth.AuthTokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthMicroservice
+namespace AuthMicroservice.Database
 {
     public class UserDbContext(DbContextOptions<UserDbContext> options) : IdentityDbContext<AppUser>(options)
     {

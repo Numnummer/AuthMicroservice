@@ -5,7 +5,7 @@ namespace AuthMicroservice.Models.Auth.RequestModels
     public class TokenRequest
     {
         [Required]
-        public string Token { get; set; }
+        public string JwtToken { get; set; }
         [Required]
         public string RefreshToken { get; set; }
     }

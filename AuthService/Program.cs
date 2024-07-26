@@ -1,6 +1,7 @@
-using AuthMicroservice;
 using AuthMicroservice.AutoMapper;
 using AuthMicroservice.CustomMiddleware;
+using AuthMicroservice.Database;
+using AuthMicroservice.Extentions;
 using AuthMicroservice.Models;
 using AuthMicroservice.Options;
 using MassTransit;
@@ -71,6 +72,8 @@ builder.Services.AddMassTransit(x =>
         config.ConfigureEndpoints(context);
     })
 );
+builder.RegisterAppRepositories();
+builder.RegisterAppUseCases();
 
 var app = builder.Build();
 
