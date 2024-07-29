@@ -3,7 +3,6 @@ using AuthMicroservice.Models.Auth.RequestModels.SecondFactor;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
 using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Options;
-using AuthMicroservice.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -27,10 +26,11 @@ namespace AuthMicroservice.Models.User
             };
             logger?.LogInformation("Создаем пользователя");
             var result = await userManager.CreateAsync(user, registrationUserData.Password);
-            logger?.LogInformation($"Результат: {result}");
-            if (result.Succeeded)
+            var addToRoleResult = await userManager.AddToRoleAsync(user, registrationUserData.Role);
+            logger?.LogInformation($"Результат: {result} и {addToRoleResult}");
+            if (result.Succeeded && addToRoleResult.Succeeded)
             {
-                var authResult = await signInManager.PasswordSignInAsync(user, registrationUserData.Password, false, true);
+                var authResult = await signInManager.CheckPasswordSignInAsync(user, registrationUserData.Password, true);
                 logger?.LogInformation(authResult.ToString());
                 if (authResult.Succeeded)
                 {
@@ -45,6 +45,7 @@ namespace AuthMicroservice.Models.User
                 }
             }
             var userToDelete = await userManager.FindByEmailAsync(registrationUserData.Email);
+            await userManager.RemoveFromRoleAsync(user, registrationUserData.Role);
             await userManager.DeleteAsync(userToDelete);
             return null;
         }
@@ -104,5 +105,7 @@ namespace AuthMicroservice.Models.User
             }
             return null;
         }
+
+
     }
 }

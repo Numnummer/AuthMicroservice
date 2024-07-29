@@ -32,7 +32,7 @@ namespace AuthMicroservice.Models.Auth.AuthTokens
         public async Task<AuthResult> GenerateJwtAndRefreshTokensAsync(AppUser user)
         {
             var jwtTokenId = Guid.NewGuid().ToString();
-            var jwtToken = GenerateJwtToken(user, jwtTokenId);
+            var jwtToken = await GenerateJwtToken(user, jwtTokenId);
 
             var refreshToken = new RefreshToken()
             {
@@ -68,6 +68,14 @@ namespace AuthMicroservice.Models.Auth.AuthTokens
                 //Проверка, является ли пришедший jwt токен валидным
                 var principal = tokenService.ValidateJwtToken(tokenRequest.JwtToken,
                     out var validatedToken);
+                if (principal == null)
+                {
+                    return new AuthResult()
+                    {
+                        Errors = new List<string>() { "Given jwt token invalid" },
+                        Success = false
+                    };
+                }
 
                 //Проверка, устарел ли пришедший jwt токен
                 //если устарел то идем дальше
@@ -126,7 +134,7 @@ namespace AuthMicroservice.Models.Auth.AuthTokens
                 var dbUser = await userManager.FindByIdAsync(storedRefreshToken.UserId);
                 if (dbUser == null) return null;
 
-                return GenerateJwtTokenByRefreshToken(dbUser, storedRefreshToken);
+                return await GenerateJwtTokenByRefreshToken(dbUser, storedRefreshToken);
             }
             catch (Exception)
             {
@@ -134,16 +142,17 @@ namespace AuthMicroservice.Models.Auth.AuthTokens
             }
         }
 
-        private string GenerateJwtToken(AppUser user, string tokenId)
+        private async Task<string> GenerateJwtToken(AppUser user, string tokenId)
         {
+            var roles = await userManager.GetRolesAsync(user);
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(optionsMonitor.CurrentValue.Key);
-            var tokenDescriptor = CreateTokenDescriptor(user, tokenId, key);
+            var tokenDescriptor = CreateTokenDescriptor(user, roles[0], tokenId, key);
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
         }
 
-        private SecurityTokenDescriptor? CreateTokenDescriptor(AppUser user, string tokenId, byte[] key)
+        private SecurityTokenDescriptor? CreateTokenDescriptor(AppUser user, string role, string tokenId, byte[] key)
         {
             return new SecurityTokenDescriptor
             {
@@ -152,19 +161,22 @@ namespace AuthMicroservice.Models.Auth.AuthTokens
                     new Claim("Id", user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, tokenId)
+                    new Claim(JwtRegisteredClaimNames.Jti, tokenId),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
                 }),
                 Expires = DateTime.UtcNow
                     .AddMinutes(optionsMonitor.CurrentValue.ExpireTimeInMinutes),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
-                    tokenService.GetSecurityAlgoritmSignature())
+                    tokenService.GetSecurityAlgoritmSignature()),
+                Audience= optionsMonitor.CurrentValue.Audience,
+                Issuer= optionsMonitor.CurrentValue.Issuer
             };
         }
 
-        private AuthResult GenerateJwtTokenByRefreshToken(AppUser user, RefreshToken refreshToken)
+        private async Task<AuthResult> GenerateJwtTokenByRefreshToken(AppUser user, RefreshToken refreshToken)
         {
-            var jwtToken = GenerateJwtToken(user, refreshToken.JwtId);
+            var jwtToken = await GenerateJwtToken(user, refreshToken.JwtId);
             return new AuthResult()
             {
                 Token = jwtToken,
