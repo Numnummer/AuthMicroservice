@@ -51,9 +51,11 @@ namespace AuthTest
             var userManagerMock = AuthServiceTestHelper.GetUserManagerMock();
             userManagerMock.Setup(_ => _.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(_ => _.AddToRoleAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
             var signInManagerMock = AuthServiceTestHelper.GetSignInManagerMock(userManagerMock.Object);
-            signInManagerMock.Setup(_ => _.PasswordSignInAsync(It.IsAny<AppUser>(), It.IsAny<string>(), false, true))
+            signInManagerMock.Setup(_ => _.CheckPasswordSignInAsync(It.IsAny<AppUser>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(SignInResult.Success);
 
             var monitor = Mock.Of<IOptionsMonitor<MailSettings>>(_ => _.CurrentValue == new MailSettings());

@@ -89,7 +89,7 @@ namespace AuthMicroservice.Controllers
             return StatusCode(500, "Не удалось авторизоваться");
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("deleteUser/{email}")]
         public async Task<IActionResult> DeleteUser(string email)
         {
@@ -98,11 +98,6 @@ namespace AuthMicroservice.Controllers
             return StatusCode(500);
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet("getSecret")]
-        public IActionResult GetSecret()
-        {
-            return Ok("asdasd");
-        }
+
     }
 }
