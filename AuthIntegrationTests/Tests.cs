@@ -29,7 +29,7 @@ namespace AuthIntegrationTests
             var registrationData = new RegistrationUserData()
             {
                 Email="binaryfile@mail.ru",
-                FullName="TestTest",
+                FullName="User0",
                 Role="admin",
                 Password="Password1/",
                 Confirm="Password1/"
@@ -57,7 +57,7 @@ namespace AuthIntegrationTests
             //arrange
             var signInData = new SignInUserData()
             {
-                Email="binaryfile@mail.ru",
+                Email="bignumbergames@gmail.com",
                 Password="Password1/",
             };
             //act
