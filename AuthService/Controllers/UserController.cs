@@ -47,7 +47,7 @@ namespace AuthMicroservice.Controllers
         /// </summary>
         /// <param name="userData"></param>
         /// <returns></returns>
-        [HttpPost("enter")]
+        [HttpPost("signIn")]
         public async Task<IActionResult> SignInUser(SignInUserData signInUserData)
         {
             var result = await appUserUseCases.SignInUserAsync(signInUserData);
@@ -89,12 +89,20 @@ namespace AuthMicroservice.Controllers
             return StatusCode(500, "Не удалось авторизоваться");
         }
 
+        //[Authorize(Roles = "admin")]
         [HttpDelete("deleteUser/{email}")]
         public async Task<IActionResult> DeleteUser(string email)
         {
             var result = await appUserUseCases.DeleteUserAsync(email);
             if (result) return Ok();
             return StatusCode(500);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("getSecret")]
+        public IActionResult GetSecret()
+        {
+            return Ok("asdasd");
         }
     }
 }
