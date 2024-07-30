@@ -28,10 +28,7 @@ jobs:
       run: |
         dotnet test AuthIntegrationTests.Tests --logger trx --collect "Code coverage"
         dotnet test AuthTest.Tests --logger trx --collect "Code coverage"
-      
-    - name: Upload coverage
-      uses: codecov/codecov-action@v3
-
+        
     - name: Fail if tests fail
       if: ${{ failure() }}
       run: exit 1
