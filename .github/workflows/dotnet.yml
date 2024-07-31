@@ -6,10 +6,35 @@ on:
       - develop
       - master
 
+
 jobs:
 
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      rabbitmq:
+        image: rabbitmq:3.9-management    
+        options: >-
+          --health-cmd "rabbitmq-diagnostics -q ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5672:5672
+          - 15672:15672
+
     
     steps:
     - uses: actions/checkout@v3
@@ -25,6 +50,9 @@ jobs:
       run: dotnet build --no-restore
       
     - name: Test
+      env:
+        POSTGRES_CONNECTION_STRING: "Host=localhost;Port=5432;Database=english_site;Username=big;Password=${{ secrets.POSTGRES_PASSWORD }}"
+        RABBITMQ_CONNECTION_STRING: "amqp://guest:guest@localhost:5672"
       run: |
         dotnet test AuthIntegrationTests.Tests --logger trx --collect "Code coverage"
         dotnet test AuthTest.Tests --logger trx --collect "Code coverage"
