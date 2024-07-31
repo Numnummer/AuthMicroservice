@@ -20,7 +20,7 @@ builder.Services.AddDbContext<UserDbContext>(opt =>
 opt.UseNpgsql(builder.Configuration.GetConnectionString("Users")));
 builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
 {
-    opt.SignIn.RequireConfirmedEmail = true;
+    opt.SignIn.RequireConfirmedEmail = false;
     opt.User.RequireUniqueEmail = true;
     opt.Password.RequiredLength=5;
 })

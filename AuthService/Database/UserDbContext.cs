@@ -1,4 +1,5 @@
-﻿using AuthMicroservice.Models.Auth.AuthTokens;
+﻿using AuthMicroservice.Database.Configurations;
+using AuthMicroservice.Models.Auth.AuthTokens;
 using AuthMicroservice.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace AuthMicroservice.Database
     {
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<AppUser>(usr => usr.HasKey(x => x.Id));
+            builder.ApplyConfiguration<IdentityRole>(
+                new IdentityRoleConfiguration());
         }
     }
 }

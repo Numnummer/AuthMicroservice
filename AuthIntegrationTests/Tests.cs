@@ -1,7 +1,10 @@
 ﻿using AuthMicroservice.Models.Auth;
 using AuthMicroservice.Models.Auth.RequestModels.UserData;
+using AuthMicroservice.Models.Auth.ResponseModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 
@@ -26,16 +29,26 @@ namespace AuthIntegrationTests
             var registrationData = new RegistrationUserData()
             {
                 Email="binaryfile@mail.ru",
-                FullName="TestTest",
-                Role="Admin",
+                FullName="User0",
+                Role="admin",
                 Password="Password1/",
                 Confirm="Password1/"
             };
-            //act
-            await _httpClient.DeleteAsync($"/deleteUser/{registrationData.Email}");
+            //act + assert           
+
+            // Делаем запрос на регистрацию
             var response = await _httpClient.PostAsJsonAsync("/register", registrationData);
-            //assert
             response.EnsureSuccessStatusCode();
+            // Достаём токены доступа и устанавливаем их в хедер
+            var responseContent = await response.Content
+                .ReadFromJsonAsync<AuthResponse>();
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", responseContent.Token);
+            // Удаляем пользователя
+            var deleteResponse =
+                await _httpClient.DeleteAsync($"/deleteUser/{registrationData.Email}");
+
+            deleteResponse.EnsureSuccessStatusCode();
         }
 
         [Test]
@@ -44,11 +57,11 @@ namespace AuthIntegrationTests
             //arrange
             var signInData = new SignInUserData()
             {
-                Email="binaryfile@mail.ru",
+                Email="bignumbergames@gmail.com",
                 Password="Password1/",
             };
             //act
-            var response = await _httpClient.PostAsJsonAsync("/enter", signInData);
+            var response = await _httpClient.PostAsJsonAsync("/signIn", signInData);
             //assert
             response.EnsureSuccessStatusCode();
         }
