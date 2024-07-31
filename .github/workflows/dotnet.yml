@@ -51,7 +51,7 @@ jobs:
       
     - name: Test
       env:
-        POSTGRES_CONNECTION_STRING: "Host=localhost;Port=5432;Database=english_site;Username=big;Password=${{ secrets.POSTGRES_PASSWORD }}"
+        POSTGRES_CONNECTION_STRING: "Host=localhost;Username=big;Password=${{ secrets.POSTGRES_PASSWORD }};Database=english_site"
         RABBITMQ_CONNECTION_STRING: "amqp://guest:guest@localhost:5672"
       run: |
         dotnet test AuthIntegrationTests
