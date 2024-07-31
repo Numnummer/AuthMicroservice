@@ -54,8 +54,8 @@ jobs:
         POSTGRES_CONNECTION_STRING: "Host=localhost;Port=5432;Database=english_site;Username=big;Password=${{ secrets.POSTGRES_PASSWORD }}"
         RABBITMQ_CONNECTION_STRING: "amqp://guest:guest@localhost:5672"
       run: |
-        dotnet test AuthIntegrationTests --logger trx --collect "Code coverage"
-        dotnet test AuthTest --logger trx --collect "Code coverage"
+        dotnet test AuthIntegrationTests
+        dotnet test AuthTest 
         
     - name: Fail if tests fail
       if: ${{ failure() }}
